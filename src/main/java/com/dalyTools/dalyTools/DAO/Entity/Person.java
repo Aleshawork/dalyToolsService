@@ -3,71 +3,50 @@ package com.dalyTools.dalyTools.DAO.Entity;
 
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
+@Data
 @Table(name = "person")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(generator = "increment")
+    private long id;
 
 
-    @Column(name = "name")
+    @Column(name = "first_name")
     private String name;
 
-    @Column(name = "sername")
+    @Column(name = "second_name")
     private String sername;
+
+    @Column(name = "username")
+    private String username;
 
     @Column(name="email")
     private String email;
 
-    public Person(int id, String name, String sername, String email) {
-        this.id = id;
-        this.name = name;
-        this.sername = sername;
-        this.email = email;
-    }
+    @Column(name = "password")
+    private String password;
 
-    public Person() {
-    }
+    @Column(name = "activation_code")
+    private String activationCode;
 
-    public int getId() {
-        return id;
-    }
+    @Column(name = "data_creation_code")
+    private LocalDateTime dataCreationCode;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getSername() {
-        return sername;
-    }
-
-    public void setSername(String sername) {
-        this.sername = sername;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return id+'-'+name+'-'+sername+'-'+email;
-    }
 }

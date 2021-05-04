@@ -4,6 +4,7 @@ import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
 import com.dalyTools.dalyTools.DAO.Repository.RoleRepository;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
+import com.dalyTools.dalyTools.exceptions.NotFoundException;
 import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +51,7 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public Optional<Person> findByUserName(String name){return personRepository.findByUsername(toString());}
+    public Optional<Person> findByUserName(String userName){return personRepository.findByUsername(userName);}
 
 
     public Person deleteByName(String name) {
@@ -81,10 +82,17 @@ public class PersonService {
        return personRepository.save(registerPerson);
 
 
+    }
 
+    public void activateUser(String encodedUserActivationCode) {
 
+        Person activatedPerson = personRepository.findByActivationCode(encodedUserActivationCode).orElseThrow(
+                () -> { throw new NotFoundException(/*"Activation code not found"*/);}
+        );
 
+        activatedPerson.setActivationCode(null);
 
+        personRepository.save(activatedPerson);
 
     }
 

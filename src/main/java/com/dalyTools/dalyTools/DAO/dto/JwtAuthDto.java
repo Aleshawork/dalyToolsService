@@ -3,8 +3,9 @@ package com.dalyTools.dalyTools.DAO.dto;
 import lombok.Data;
 
 @Data
-public class AuthenticationRequestDto {
-
+public class JwtAuthDto {
     private String username;
-    private String password;
+    private String accessToken;
+    private String refreshToken;
+
 }

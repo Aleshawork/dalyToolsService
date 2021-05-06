@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class TestController {
 
-    @GetMapping("/ping")
-    @ResponseBody
-    ResponseEntity ping(){
-        return new  ResponseEntity(HttpStatus.OK);
+    @GetMapping("/admin")
+    ResponseEntity<String> admin(){
+        return   ResponseEntity.ok("Hello Admin!");
+    }
+
+    @GetMapping("/auth/all")
+    ResponseEntity<String> all(){
+        return ResponseEntity.ok("Hello any people!");
     }
 }

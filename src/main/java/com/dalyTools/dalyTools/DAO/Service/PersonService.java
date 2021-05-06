@@ -72,7 +72,8 @@ public class PersonService {
         registerPerson.setEmail(personDto.getEmail());
         registerPerson.setActivationCode(UUID.randomUUID().toString());
         registerPerson.setDataCreationCode(LocalDateTime.now());
-        registerPerson.setRole(roleRepository.findByName("ROLE_PERSON").orElseThrow(() -> { throw new NoSuchElementException("No such role found.");
+
+        registerPerson.setRole(roleRepository.findByName(personDto.getRole()).orElseThrow(() -> { throw new NoSuchElementException("No such role found.");
         }));
         String encodedPassword = bCryptPasswordEncoder.encode(personDto.getPassword());
         registerPerson.setPassword(encodedPassword);

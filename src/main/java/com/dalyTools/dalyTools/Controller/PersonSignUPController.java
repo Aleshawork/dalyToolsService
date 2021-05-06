@@ -25,7 +25,7 @@ public class PersonSignUPController {
         this.personService = personService;
     }
 
-    @PostMapping("/person")
+    @PostMapping("/user")
     ResponseEntity<PersonPayLoadDto> signUpPerson(@RequestBody PersonDto personDto){
 
         if(personService.findByUserName(personDto.getUsername()).isPresent()){

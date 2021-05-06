@@ -24,7 +24,4 @@ public class PersonPayLoadDto {
         this.password=person.getPassword();
         this.role=person.getRole().getName();
     }
-
-
-
 }

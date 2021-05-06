@@ -4,18 +4,13 @@ import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Service.PersonService;
 import com.dalyTools.dalyTools.DAO.dto.AuthenticationRequestDto;
 import com.dalyTools.dalyTools.DAO.dto.JwtAuthDto;
-import com.dalyTools.dalyTools.DAO.page_dto.PersonPageDto;
 import com.dalyTools.dalyTools.Securityty.JwtTokenProvider;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")

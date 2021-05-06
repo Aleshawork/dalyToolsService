@@ -1,4 +1,4 @@
-package com.dalyTools.dalyTools.DAO.page_dto;
+package com.dalyTools.dalyTools.DAO.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,4 +10,5 @@ public class PersonPageDto {
     private String second_name;
     private String usrname;
     private String email;
+
 }

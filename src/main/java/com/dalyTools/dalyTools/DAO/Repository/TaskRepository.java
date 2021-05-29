@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface TaskRepository {
 
-    ResponseEntity<AllTaskDto> getAllTask(Date date);
+    ResponseEntity<AllTaskDto> getAllTask(Integer fr_id,Date date);
     void setNewTask(Map<Integer,String> mapOfTask);
 
 }

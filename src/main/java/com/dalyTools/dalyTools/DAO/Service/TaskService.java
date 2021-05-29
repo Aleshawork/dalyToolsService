@@ -22,14 +22,12 @@ public class TaskService implements TaskRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public ResponseEntity<AllTaskDto> getAllTask(Date date) {
+    public ResponseEntity<AllTaskDto> getAllTask(Integer fr_id,Date date) {
 
-        // todo: add fr_id/id in parameters of method + add fr_id/id in dto
 
-        // todo: change 1 by fr_id
         HashMap<Integer,String>  mapOfTask = jdbcTemplate.query(
                 SELECT_ALL_TASK,
-                new Object[]{1,date},
+                new Object[]{fr_id,date},
                 (ResultSet rs) ->{
 
                     HashMap<Integer,String> map =new HashMap<>();

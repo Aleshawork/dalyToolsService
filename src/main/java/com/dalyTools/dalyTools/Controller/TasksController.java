@@ -2,7 +2,7 @@ package com.dalyTools.dalyTools.Controller;
 
 import com.dalyTools.dalyTools.DAO.Service.TaskService;
 import com.dalyTools.dalyTools.DAO.dto.AllTaskDto;
-import com.dalyTools.dalyTools.DAO.payload.DatePayloadDto;
+import com.dalyTools.dalyTools.DAO.payload.TaskPayloadDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,11 @@ public class TasksController {
 
     // todo: change String date -> sql.Date
     @PostMapping("/getall")
-    ResponseEntity<AllTaskDto> getAllTaskByDate(@RequestBody DatePayloadDto datePayloadDto){
+    // при
+    ResponseEntity<AllTaskDto> getAllTaskByDate(@RequestBody TaskPayloadDto datePayloadDto){
         Date date=  Date.valueOf(datePayloadDto.getDate());
-        return  taskService.getAllTask(date);
+        Integer fr_id = datePayloadDto.getFr_id();
+        return  taskService.getAllTask(fr_id,date);
 
     }
 

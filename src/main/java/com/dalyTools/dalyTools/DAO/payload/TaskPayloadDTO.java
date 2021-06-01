@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class TaskPayloadDto {
+public class TaskPayloadDTO {
 
-    @JsonProperty("date")
+    @JsonProperty(value = "date")
     private String date;
-
-    @JsonProperty("fr_id")
-    private Integer fr_id;
 }

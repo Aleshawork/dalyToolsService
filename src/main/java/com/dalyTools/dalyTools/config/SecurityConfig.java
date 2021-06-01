@@ -1,6 +1,7 @@
 package com.dalyTools.dalyTools.config;
 
 import com.dalyTools.dalyTools.Securityty.JwtConfigurer;
+import com.dalyTools.dalyTools.Securityty.JwtTokenFilter;
 import com.dalyTools.dalyTools.Securityty.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,11 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final  JwtTokenFilter jwtTokenFilter;
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider,JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtTokenFilter=jwtTokenFilter;
     }
+
+
 
 
     @Bean
@@ -40,18 +46,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        /* ADMIN_ENDPOINT не имеет доступ к ** /api/person/ **
+                todo: отдельно написать для admin
+        */
+
+
         http
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(SIGNUP_ENDPOINT,PERSON_ENDPOINT,AUTH_ENDPOINT).permitAll()
+                .antMatchers(SIGNUP_ENDPOINT,AUTH_ENDPOINT).permitAll()
+                .antMatchers(PERSON_ENDPOINT).hasRole("PERSON")
                 .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().disable()
-                .apply(new JwtConfigurer(jwtTokenProvider));
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
 

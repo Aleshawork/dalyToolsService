@@ -2,7 +2,9 @@ package com.dalyTools.dalyTools.Controller;
 
 import com.dalyTools.dalyTools.DAO.Service.TaskService;
 import com.dalyTools.dalyTools.DAO.dto.AllTaskDto;
-import com.dalyTools.dalyTools.DAO.payload.TaskPayloadDto;
+import com.dalyTools.dalyTools.DAO.dto.WeekTaskDto;
+import com.dalyTools.dalyTools.DAO.payload.IntervalTaskPayloadDTO;
+import com.dalyTools.dalyTools.DAO.payload.TaskPayloadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,15 +22,21 @@ public class TasksController {
     private TaskService taskService;
 
 
-    // todo: change String date -> sql.Date
-    @PostMapping("/getall")
-    // при
-    ResponseEntity<AllTaskDto> getAllTaskByDate(@RequestBody TaskPayloadDto datePayloadDto){
-        Date date=  Date.valueOf(datePayloadDto.getDate());
-        Integer fr_id = datePayloadDto.getFr_id();
-        return  taskService.getAllTask(fr_id,date);
 
+    @PostMapping("/getall")
+    ResponseEntity<AllTaskDto> getAllTaskByDate(@RequestBody TaskPayloadDTO taskPayloadDTO){
+        Date date=  Date.valueOf(taskPayloadDTO.getDate());
+        return  taskService.getAllTask(date);
     }
+
+    @PostMapping("/getweek")
+    ResponseEntity<WeekTaskDto> getTaskByWeek(@RequestBody IntervalTaskPayloadDTO intervalTaskPayloadDTO ){
+
+        return taskService.getTaskByWeek(intervalTaskPayloadDTO.getFirstDate()
+                ,intervalTaskPayloadDTO.getLastDate());
+    }
+
+
 
 
 }

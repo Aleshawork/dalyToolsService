@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PersonPayLoadDto {
+    private Long id;
     private String name;
     private String sername;
     private String username;
@@ -17,6 +18,7 @@ public class PersonPayLoadDto {
     private String role;
 
     PersonPayLoadDto(Person person){
+        this.id= person.getId();
         this.name= person.getName();;
         this.sername=person.getSername();
         this.username=person.getUsername();

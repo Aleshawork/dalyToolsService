@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLData;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -58,6 +59,8 @@ public class JwtTokenProvider {
     public String createAccessToken(Person person){
         Claims claims = Jwts.claims().setSubject(person.getUsername());
         claims.put("role", person.getRole().getName());
+//        claims.put("id",person.getId());
+//        claims.put("name",person.getName());
 
         Date now = new Date();
         Date expiration = new Date(now.getTime() + accessTokenExpiration);
@@ -100,8 +103,11 @@ public class JwtTokenProvider {
 
     public boolean validateAccessToken(String token) {
         try {
+            // вытаскиваем из JWT токена информацию
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Date now =new Date();
             return !claims.getBody().getExpiration().before(new Date());
+            //getExpiration().before(new Date())
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }

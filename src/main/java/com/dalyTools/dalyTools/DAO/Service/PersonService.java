@@ -64,7 +64,7 @@ public class PersonService  {
     }
 
 
-    public Person registerNewPerson(PersonDto personDto) throws NoSuchElementException{
+    public Person registerNewPerson(PersonDto personDto){
         Person registerPerson = new Person();
         registerPerson.setName(personDto.getName());
         registerPerson.setSername(personDto.getSername());
@@ -73,8 +73,7 @@ public class PersonService  {
         registerPerson.setActivationCode(UUID.randomUUID().toString());
         registerPerson.setDataCreationCode(LocalDateTime.now());
 
-        registerPerson.setRole(roleRepository.findByName(personDto.getRole()).orElseThrow(() -> { throw new NoSuchElementException("No such role found.");
-        }));
+        registerPerson.setRole(roleRepository.findByName(personDto.getRole()).get());
         String encodedPassword = bCryptPasswordEncoder.encode(personDto.getPassword());
         registerPerson.setPassword(encodedPassword);
         //TODO: send email message
@@ -87,9 +86,7 @@ public class PersonService  {
 
     public void activateUser(String encodedUserActivationCode) throws NotFoundException {
 
-        Person activatedPerson = personRepository.findByActivationCode(encodedUserActivationCode).orElseThrow(
-                () -> { throw new NotFoundException(/*"Activation code not found"*/);}
-        );
+        Person activatedPerson = personRepository.findByActivationCode(encodedUserActivationCode).get();
 
         activatedPerson.setActivationCode(null);
 

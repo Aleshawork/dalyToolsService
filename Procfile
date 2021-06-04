@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -jar target/dalyTools-0.0.1-SNAPSHOT.jar

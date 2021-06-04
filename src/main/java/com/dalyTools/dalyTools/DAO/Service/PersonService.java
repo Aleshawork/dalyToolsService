@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class PersonService {
+public class PersonService  {
 
     private PersonRepository personRepository;
 
@@ -64,7 +64,7 @@ public class PersonService {
     }
 
 
-    public Person registerNewPerson(PersonDto personDto){
+    public Person registerNewPerson(PersonDto personDto) throws NoSuchElementException{
         Person registerPerson = new Person();
         registerPerson.setName(personDto.getName());
         registerPerson.setSername(personDto.getSername());
@@ -85,7 +85,7 @@ public class PersonService {
 
     }
 
-    public void activateUser(String encodedUserActivationCode) {
+    public void activateUser(String encodedUserActivationCode) throws NotFoundException {
 
         Person activatedPerson = personRepository.findByActivationCode(encodedUserActivationCode).orElseThrow(
                 () -> { throw new NotFoundException(/*"Activation code not found"*/);}

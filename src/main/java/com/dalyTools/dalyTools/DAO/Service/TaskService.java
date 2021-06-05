@@ -7,6 +7,7 @@ import com.dalyTools.dalyTools.DAO.dto.WeekTaskDto;
 import com.dalyTools.dalyTools.Securityty.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,15 @@ public class TaskService implements TaskRepository {
 
     private String SELECT_ALL_TASK = "select task,priority from day_task where fr_nom = (select id from date_task where fr_id=( select id from person where username=?) and date=?);";
     private String SELECT_TASK_BY_WEEK = "select date_task.date, day_task.task from day_task left join date_task on date_task.id=day_task.fr_nom where date_task.date between ? and ? and date_task.fr_id = (select id from person where username=?) order by date_task.date, day_task.priority;";
-    private String INSER_TASK = "";
+    private String INSERT_START_TASK = "";
+    /*
+    select id into buf from person  where username='OLEG';
+insert into date_task (fr_id,date,kol_task) values ((select  id from buf),'05-06-2020',0);
+insert into day_task (fr_nom,task,priority) values ((select id from date_task where fr_id=(select  id from buf)),'Добавте первую задачу',1);
+
+     */
+    // устанавливаем в таблице date_task kol_task=0
+
 
     private String userName;
 
@@ -100,6 +109,21 @@ public class TaskService implements TaskRepository {
 
 
         return ResponseEntity.ok(weekTaskDto);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> addTask(String date, int priority, String task) {
+
+        Date dateTask = Date.valueOf(date);
+        // todo: дописать
+
+
+        return null;
+    }
+
+    @Override
+    public void addStartTask(Date date, String username) {
+
     }
 }
 

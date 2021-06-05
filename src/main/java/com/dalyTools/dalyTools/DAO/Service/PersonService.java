@@ -3,6 +3,7 @@ package com.dalyTools.dalyTools.DAO.Service;
 import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
 import com.dalyTools.dalyTools.DAO.Repository.RoleRepository;
+import com.dalyTools.dalyTools.DAO.Repository.TaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
 import com.dalyTools.dalyTools.exceptions.NotFoundException;
 import com.sun.xml.bind.v2.TODO;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,15 +25,19 @@ public class PersonService  {
 
     private PersonRepository personRepository;
 
+    private TaskRepository taskRepository;
+
     private RoleRepository roleRepository;
+
 
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Autowired
-    public PersonService(PersonRepository personRepository, RoleRepository roleRepository) {
+    public PersonService(PersonRepository personRepository,TaskRepository taskRepository, RoleRepository roleRepository) {
         this.personRepository = personRepository;
+        this.taskRepository=taskRepository;
         this.roleRepository = roleRepository;
 
     }
@@ -76,10 +81,14 @@ public class PersonService  {
         registerPerson.setRole(roleRepository.findByName(personDto.getRole()).get());
         String encodedPassword = bCryptPasswordEncoder.encode(personDto.getPassword());
         registerPerson.setPassword(encodedPassword);
+        Person person = personRepository.save(registerPerson);
+        java.util.Date date = new java.util.Date();
+
+        // установим пользователю первый task на дату создания
+        taskRepository.addStartTask(new Date( date.getTime()),personDto.getUsername());
         //TODO: send email message
 
-
-       return personRepository.save(registerPerson);
+       return person ;
 
 
     }

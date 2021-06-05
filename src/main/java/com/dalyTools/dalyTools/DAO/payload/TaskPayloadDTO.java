@@ -8,4 +8,10 @@ public class TaskPayloadDTO {
 
     @JsonProperty(value = "date")
     private String date;
+
+    @JsonProperty(value="priority")
+    private int priority;
+
+    @JsonProperty(value="task")
+    private String task;
 }

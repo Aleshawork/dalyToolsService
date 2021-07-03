@@ -19,7 +19,7 @@ insert into date_task (fr_id,date,kol_task) values
 insert into day_task (fr_nom,task,priority) values
 ((select dt.id from date_task dt join person p on
         p.id=dt.fr_id where
-          p.username=user_name and dt.date=date_task),
+          p.username=user_name),
  name_task,1);
 
 $$ LANGUAGE SQL;

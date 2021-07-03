@@ -7,6 +7,9 @@ import com.dalyTools.dalyTools.DAO.Repository.TaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
 import com.dalyTools.dalyTools.exceptions.NotFoundException;
 import com.sun.xml.bind.v2.TODO;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class PersonService  {
 
@@ -28,6 +32,9 @@ public class PersonService  {
     private TaskRepository taskRepository;
 
     private RoleRepository roleRepository;
+
+    private Logger logger = LoggerFactory.getLogger(PersonService.class);
+
 
 
     @Autowired
@@ -82,10 +89,12 @@ public class PersonService  {
         String encodedPassword = bCryptPasswordEncoder.encode(personDto.getPassword());
         registerPerson.setPassword(encodedPassword);
         Person person = personRepository.save(registerPerson);
+        logger.info("Register new user,  name:{}  userName:{}",personDto.getName(),personDto.getUsername());
         java.util.Date date = new java.util.Date();
 
         // установим пользователю первый task на дату создания
         taskRepository.addStartTask(new Date( date.getTime()),personDto.getUsername());
+
 
         //TODO: send email message
 

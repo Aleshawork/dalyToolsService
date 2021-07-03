@@ -33,7 +33,6 @@ public class TaskService implements TaskRepository {
     private String SELECT_TASK_BY_WEEK = "select date_task.date, day_task.task from day_task left join date_task on date_task.id=day_task.fr_nom where date_task.date between ? and ? and date_task.fr_id = (select id from person where username=?) order by date_task.date, day_task.priority;";
     private String INSERT_START_TASK = "select add_start_task(?,?,?,?)";
     private String INSERT_NEW_TASK= "select add_new_task(?,?,?,?)";
-
     private String userName;
 
     @Value("${jwt.secret}")
@@ -121,7 +120,7 @@ public class TaskService implements TaskRepository {
             jdbcTemplate.update(INSERT_NEW_TASK,userName,dateTask,task,priority);
             logger.info("Добавлена задача для  USER: {}",userName);
         } catch (DataAccessException e) {
-           logger.warn("Результат возвращён когда его не ожидалось (в ISERT_NEW_TASK)");
+           logger.warn("addTask -> Результат возвращён когда его не ожидалось (в ISERT_NEW_TASK)");
         }
 
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
@@ -137,7 +136,7 @@ public class TaskService implements TaskRepository {
         try {
             jdbcTemplate.update(INSERT_START_TASK, username, date, "Создайте новую задачу !",1);
         } catch (DataAccessException e) {
-            logger.warn(" Результат возвращён когда его не ожидалось (в ISERT_START_TASK)");
+            logger.warn(" assStartTask -> Результат возвращён когда его не ожидалось (в ISERT_START_TASK)");
         }
         logger.info("Start task add for  USER: {} !",username);
 

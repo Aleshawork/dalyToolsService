@@ -5,8 +5,12 @@ import com.dalyTools.dalyTools.DAO.dto.AllTaskDto;
 import com.dalyTools.dalyTools.DAO.dto.StatusDTO;
 import com.dalyTools.dalyTools.DAO.dto.WeekTaskDto;
 import com.dalyTools.dalyTools.Securityty.JwtUser;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,19 +23,16 @@ import java.sql.ResultSet;
 import java.util.*;
 
 @Service
+@Slf4j
 public class TaskService implements TaskRepository {
+
+    private final Logger logger = LoggerFactory.getLogger(TaskService.class);
+
 
     private String SELECT_ALL_TASK = "select task,priority from day_task where fr_nom = (select id from date_task where fr_id=( select id from person where username=?) and date=?);";
     private String SELECT_TASK_BY_WEEK = "select date_task.date, day_task.task from day_task left join date_task on date_task.id=day_task.fr_nom where date_task.date between ? and ? and date_task.fr_id = (select id from person where username=?) order by date_task.date, day_task.priority;";
-    private String INSERT_START_TASK = "";
-    /*
-    select id into buf from person  where username='OLEG';
-insert into date_task (fr_id,date,kol_task) values ((select  id from buf),'05-06-2020',0);
-insert into day_task (fr_nom,task,priority) values ((select id from date_task where fr_id=(select  id from buf)),'Добавте первую задачу',1);
-
-     */
-    // устанавливаем в таблице date_task kol_task=0
-
+    private String INSERT_START_TASK = "select add_start_task(?,?,?,?)";
+    private String INSERT_NEW_TASK= "select add_new_task(?,?,?,?)";
 
     private String userName;
 
@@ -68,11 +69,7 @@ insert into day_task (fr_nom,task,priority) values ((select id from date_task wh
         ));
     }
 
-    @Override
-    public ResponseEntity<StatusDTO> setNewTask(Date date, String task) {
 
-        return null;
-    }
 
 
     // задачи идут по порядку приоритетности по полю priority
@@ -114,15 +111,35 @@ insert into day_task (fr_nom,task,priority) values ((select id from date_task wh
     @Override
     public ResponseEntity<HttpStatus> addTask(String date, int priority, String task) {
 
-        Date dateTask = Date.valueOf(date);
-        // todo: дописать
+       Date dateTask = Date.valueOf(date);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
+        userName = jwtuser.getUsername();
 
-        return null;
+        try{
+            jdbcTemplate.update(INSERT_NEW_TASK,userName,dateTask,task,priority);
+            logger.info("Добавлена задача для  USER: {}",userName);
+        } catch (DataAccessException e) {
+           logger.warn("Результат возвращён когда его не ожидалось (в ISERT_NEW_TASK)");
+        }
+
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
     @Override
     public void addStartTask(Date date, String username) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
+        userName = jwtuser.getUsername();
+
+        try {
+            jdbcTemplate.update(INSERT_START_TASK, username, date, "Создайте новую задачу !",1);
+        } catch (DataAccessException e) {
+            logger.warn(" Результат возвращён когда его не ожидалось (в ISERT_START_TASK)");
+        }
+        logger.info("Start task add for  USER: {} !",username);
 
     }
 }

@@ -86,6 +86,7 @@ public class PersonService  {
 
         // установим пользователю первый task на дату создания
         taskRepository.addStartTask(new Date( date.getTime()),personDto.getUsername());
+
         //TODO: send email message
 
        return person ;

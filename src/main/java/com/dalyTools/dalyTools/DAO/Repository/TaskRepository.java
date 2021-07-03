@@ -12,7 +12,6 @@ import java.util.Map;
 public interface TaskRepository {
 
     ResponseEntity<AllTaskDto> getAllTask(Date date);
-    ResponseEntity<StatusDTO> setNewTask(Date date, String task);
     ResponseEntity<WeekTaskDto> getTaskByWeek(String firstDate, String lastDate);
     ResponseEntity<HttpStatus> addTask(String date,int priority,String task);
 

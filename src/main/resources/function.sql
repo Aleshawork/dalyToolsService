@@ -13,14 +13,14 @@ $$ LANGUAGE SQL;
 
 -- INSERT_START_TASK
 -- добавляет первую  задачу "text" пользователю, использую при регистрации пользователя
-CREATE OR REPLACE FUNCTION add_start_task(user_name varchar, date_task date, name_task varchar,priority int) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION add_start_task(user_name varchar, date_task date, name_task varchar,priority_t int) RETURNS VOID AS $$
 insert into date_task (fr_id,date,kol_task) values
-((select id  from person  where username=user_name),date_task,priority);
+((select id  from person  where username=user_name),date_task,1);
 insert into day_task (fr_nom,task,priority) values
 ((select dt.id from date_task dt join person p on
         p.id=dt.fr_id where
           p.username=user_name),
- name_task,1);
+ name_task,priority_t);
 
 $$ LANGUAGE SQL;
 -- ***

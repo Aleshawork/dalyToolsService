@@ -126,20 +126,6 @@ public class TaskService implements TaskRepository {
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
-    @Override
-    public void addStartTask(Date date, String username) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
-        userName = jwtuser.getUsername();
-
-        try {
-            jdbcTemplate.update(INSERT_START_TASK, username, date, "Создайте новую задачу !",1);
-        } catch (DataAccessException e) {
-            logger.warn(" assStartTask -> Результат возвращён когда его не ожидалось (в ISERT_START_TASK)");
-        }
-        logger.info("Start task add for  USER: {} !",username);
-
-    }
 }
 

@@ -16,5 +16,5 @@ public interface TaskRepository {
     ResponseEntity<HttpStatus> addTask(String date,int priority,String task);
 
 
-    void addStartTask(Date date, String username);
+//    void addStartTask(Date date, String username);
 }

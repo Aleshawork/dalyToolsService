@@ -3,6 +3,7 @@ package com.dalyTools.dalyTools.DAO.Entity;
 
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @Table(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
+@AllArgsConstructor
 public class Person {
 
     @Id
@@ -48,5 +50,6 @@ public class Person {
     private Role role;
 
 
-
+    public Person() {
+    }
 }

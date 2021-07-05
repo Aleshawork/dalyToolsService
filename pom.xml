@@ -15,7 +15,7 @@
 	<name>dalyTools</name>
 	<description>Demo project for Spring Boot with Spring Security</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>1.9</java.version>
 	</properties>
 
 	<dependencies>

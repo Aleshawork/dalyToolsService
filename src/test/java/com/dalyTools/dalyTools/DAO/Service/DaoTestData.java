@@ -5,6 +5,7 @@ import com.dalyTools.dalyTools.DAO.Entity.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,24 +29,24 @@ public class DaoTestData {
     }
 
     public static List<Person> aListOfPerson(){
-        return List.of(
-                new Person(3,"Alexey","Borisov","ALEXEY",
-                        "borisov_alexey@mail.ru",
-                        bCryptPasswordEncoder.encode("password"),
-                        " ",
-                        LocalDateTime.now(),
-                        new Role(
-                                1,"USER"
-                        )),
-                new Person(5,"Irina","Buzova","IRINA_228",
-                        "irina_buzova@mail.ru",
-                        bCryptPasswordEncoder.encode("password"),
-                        " ",
-                        LocalDateTime.now(),
-                        new Role(
-                                1,"USER"
-                        ))
+        List<Person> list = new ArrayList<>();
+        list.add(new Person(3,"Alexey","Borisov","ALEXEY",
+                "borisov_alexey@mail.ru",
+                bCryptPasswordEncoder.encode("password"),
+                " ",
+                LocalDateTime.now(),
+                new Role(
+                        1,"USER"
+                )));
+        list.add(new Person(5,"Irina","Buzova","IRINA_228",
+                "irina_buzova@mail.ru",
+                bCryptPasswordEncoder.encode("password"),
+                " ",
+                LocalDateTime.now(),
+                new Role(
+                        1,"USER"
+                )));
 
-        );
+        return list;
     }
 }

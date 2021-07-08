@@ -5,6 +5,7 @@ import com.dalyTools.dalyTools.DAO.Service.PersonService;
 import com.dalyTools.dalyTools.DAO.dto.AuthenticationRequestDto;
 import com.dalyTools.dalyTools.DAO.dto.JwtAuthDto;
 import com.dalyTools.dalyTools.Securityty.JwtTokenProvider;
+import com.dalyTools.dalyTools.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +31,8 @@ public class AuthenticationController {
     public ResponseEntity<JwtAuthDto> login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
         JwtAuthDto jwtAuthDto = new JwtAuthDto();
         try {
-            Person person = personService.findByUserName(authenticationRequestDto.getUsername()).orElseThrow(IllegalArgumentException::new);
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                    authenticationRequestDto.getUsername(),
-//                    authenticationRequestDto.getPassword()
-//            ));
+            Person person = personService.findByUserName(authenticationRequestDto.getUsername()).orElseThrow(
+                    ()-> new NotFoundException("Invalid password or username"));
             String accessToken = jwtTokenProvider.createAccessToken(person);
             String refreshToken = jwtTokenProvider.createRefreshToken(person.getId());
 

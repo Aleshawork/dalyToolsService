@@ -90,11 +90,6 @@ public class PersonService  {
         registerPerson.setPassword(encodedPassword);
         Person person = personRepository.save(registerPerson);
         logger.info("Register new user,  name:{}  userName:{}",personDto.getName(),personDto.getUsername());
-//        java.util.Date date = new java.util.Date();
-
-        // установим пользователю первый task на дату создания
-//        taskRepository.addStartTask(new Date( date.getTime()),personDto.getUsername());
-
 
         //TODO: send email message
 

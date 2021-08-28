@@ -1,11 +1,18 @@
 package com.dalyTools.dalyTools.exceptions;
 
-public abstract class ApiException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public ApiException() {
-    }
+public class ApiException extends RuntimeException {
 
-    public ApiException(String message) {
-        super(message);
+
+    private final String message;
+    private final Throwable throwable;
+    private final HttpStatus httpStatus;
+
+
+    public ApiException(String message, Throwable throwable, HttpStatus httpStatus) {
+        this.message = message;
+        this.throwable = throwable;
+        this.httpStatus = httpStatus;
     }
 }

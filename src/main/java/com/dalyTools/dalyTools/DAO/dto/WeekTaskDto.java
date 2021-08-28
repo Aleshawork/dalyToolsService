@@ -1,15 +1,17 @@
 package com.dalyTools.dalyTools.DAO.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.net.DatagramSocketImpl;
+import lombok.NoArgsConstructor;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WeekTaskDto {
 
-    private HashMap<Date, ArrayList<String>> weekmap;
+    private Map<Date, List<String>> weekmap;
 }

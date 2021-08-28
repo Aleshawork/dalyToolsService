@@ -5,15 +5,14 @@ import com.dalyTools.dalyTools.DAO.Service.PersonService;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
 import com.dalyTools.dalyTools.DAO.payload.PersonPayLoadDto;
 import com.dalyTools.dalyTools.DAO.payload.PersonPayloadDtoFactory;
-import com.dalyTools.dalyTools.exceptions.NotFoundException;
+import com.dalyTools.dalyTools.exceptions.ApiException;
+import com.dalyTools.dalyTools.exceptions.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Controller
 @RequestMapping("api/signup")
@@ -31,7 +30,7 @@ public class PersonSignUPController {
 
         if(personService.findByUserName(personDto.getUsername()).isPresent()){
 
-            throw new NotFoundException("A user with this name already exists");
+            throw new ApiRequestException(String.format("User with username:%s already exists",personDto.getUsername()));
         }
         Person registerPerson=personService.registerNewPerson(personDto);
 

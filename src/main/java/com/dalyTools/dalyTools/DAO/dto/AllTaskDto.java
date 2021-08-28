@@ -12,6 +12,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class AllTaskDto {
     private Date date;
-   // private String userName;
-    private HashMap<Integer,String> mapOfTask;
+    private Map<Integer,String> mapOfTask;
 }

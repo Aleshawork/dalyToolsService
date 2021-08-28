@@ -13,10 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 
-@Controller
+@RestController
 @RequestMapping("api/person/task")
 public class TasksController {
 
@@ -26,21 +27,21 @@ public class TasksController {
 
 
     @PostMapping("/getall")
-    ResponseEntity<AllTaskDto> getAllTaskByDate(@RequestBody TaskPayloadDTO taskPayloadDTO){
+    AllTaskDto getAllTaskByDate(@RequestBody TaskPayloadDTO taskPayloadDTO){
         Date date=  Date.valueOf(taskPayloadDTO.getDate());
         return  taskService.getAllTask(date);
     }
 
     @PostMapping("/getweek")
-    ResponseEntity<WeekTaskDto> getTaskByWeek(@RequestBody IntervalTaskPayloadDTO intervalTaskPayloadDTO ){
+    WeekTaskDto getTaskByWeek(@RequestBody IntervalTaskPayloadDTO intervalTaskPayloadDTO ){
 
         return taskService.getTaskByWeek(intervalTaskPayloadDTO.getFirstDate()
                 ,intervalTaskPayloadDTO.getLastDate());
     }
 
     @PostMapping("/addone")
-    ResponseEntity<HttpStatus> addNewTask(@RequestBody TaskDto taskDto){
-        return taskService.addTask(taskDto.getDate(),taskDto.getPriority(),taskDto.getTask());
+    void addNewTask(@RequestBody TaskDto taskDto){
+        taskService.addTask(taskDto.getDate(),taskDto.getPriority(),taskDto.getTask());
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -32,6 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(JwtTokenProvider jwtTokenProvider,JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtTokenFilter=jwtTokenFilter;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 

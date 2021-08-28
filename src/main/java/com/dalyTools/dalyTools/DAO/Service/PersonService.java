@@ -3,23 +3,20 @@ package com.dalyTools.dalyTools.DAO.Service;
 import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
 import com.dalyTools.dalyTools.DAO.Repository.RoleRepository;
-import com.dalyTools.dalyTools.DAO.Repository.TaskRepository;
+import com.dalyTools.dalyTools.DAO.Repository.taskRepo.TaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
-import com.dalyTools.dalyTools.exceptions.NotFoundException;
-import com.sun.xml.bind.v2.TODO;
+import com.dalyTools.dalyTools.exceptions.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-import java.sql.Date;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,32 +24,19 @@ import java.util.UUID;
 @Service
 public class PersonService  {
 
-    private PersonRepository personRepository;
-
-    private TaskRepository taskRepository;
-
-    private RoleRepository roleRepository;
-
-    private Logger logger = LoggerFactory.getLogger(PersonService.class);
-
+    private final PersonRepository personRepository;
+    private final RoleRepository roleRepository;
+    private final Logger logger = LoggerFactory.getLogger(PersonService.class);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Autowired
-    public BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
-    @Autowired
-    public PersonService(PersonRepository personRepository,TaskRepository taskRepository, RoleRepository roleRepository) {
+    public PersonService(PersonRepository personRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.personRepository = personRepository;
-        this.taskRepository=taskRepository;
         this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
-    }
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
-    }
 
     public Optional<Person> findById(int id) {
         return personRepository.findById(id);
@@ -75,7 +59,7 @@ public class PersonService  {
         return personRepository.findAll();
     }
 
-
+    @Transactional
     public Person registerNewPerson(PersonDto personDto){
         Person registerPerson = new Person();
         registerPerson.setName(personDto.getName());
@@ -98,7 +82,8 @@ public class PersonService  {
 
     }
 
-    public void activateUser(String encodedUserActivationCode) throws NotFoundException {
+    @Transactional
+    public void activateUser(String encodedUserActivationCode) throws ApiException {
 
         Person activatedPerson = personRepository.findByActivationCode(encodedUserActivationCode).get();
 

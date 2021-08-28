@@ -3,20 +3,25 @@ package com.dalyTools.dalyTools.DAO.Entity;
 
 
 
+import com.dalyTools.dalyTools.DAO.Entity.task.DateTask;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Data
 @Table(name = "person")
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Person {
 
     @Id
@@ -49,7 +54,8 @@ public class Person {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "person")
+    private List<DateTask> dateTasks = new ArrayList<>();
 
-    public Person() {
-    }
+
 }

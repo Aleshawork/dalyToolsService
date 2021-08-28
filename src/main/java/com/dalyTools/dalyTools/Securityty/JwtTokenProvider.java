@@ -38,13 +38,11 @@ public class JwtTokenProvider {
     private Long refreshTokenExpiration;
 
     private JwtUserDatailService jwtUserDatailService;
-    private PersonService personService;
     private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    public JwtTokenProvider(JwtUserDatailService jwtUserDatailService, PersonService personService, RefreshTokenRepository refreshTokenRepository) {
+    public JwtTokenProvider(JwtUserDatailService jwtUserDatailService, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUserDatailService = jwtUserDatailService;
-        this.personService = personService;
         this.refreshTokenRepository = refreshTokenRepository;
     }
 

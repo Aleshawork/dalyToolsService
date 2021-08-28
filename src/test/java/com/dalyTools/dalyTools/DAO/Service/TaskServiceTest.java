@@ -1,9 +1,5 @@
 package com.dalyTools.dalyTools.DAO.Service;
-
-import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
-import com.dalyTools.dalyTools.DAO.Repository.taskRepo.DateTaskRepository;
-import com.dalyTools.dalyTools.DAO.Repository.taskRepo.DayTaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.AllTaskDto;
 import com.dalyTools.dalyTools.DAO.dto.WeekTaskDto;
 import org.junit.Assert;
@@ -13,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-
 import java.sql.Date;
 import java.util.*;
 
@@ -25,6 +19,7 @@ class TaskServiceTest {
 
     @Mock
     private PersonRepository testPersonRepository;
+
 
 
     @Autowired

@@ -3,63 +3,56 @@ package com.dalyTools.dalyTools.DAO.Service;
 import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Entity.task.DateTask;
 import com.dalyTools.dalyTools.DAO.Entity.task.DayTask;
+import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
 import com.dalyTools.dalyTools.DAO.Repository.taskRepo.DateTaskRepository;
 import com.dalyTools.dalyTools.DAO.Repository.taskRepo.DayTaskRepository;
-import com.dalyTools.dalyTools.DAO.Repository.taskRepo.TaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.AllTaskDto;
 import com.dalyTools.dalyTools.DAO.dto.WeekTaskDto;
 import com.dalyTools.dalyTools.Securityty.JwtUser;
-import com.dalyTools.dalyTools.exceptions.ApiException;
 import com.dalyTools.dalyTools.exceptions.ApiRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class TaskService implements TaskRepository {
+public class TaskService {
 
     private final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     private final DateTaskRepository dateTaskRepository;
     private final DayTaskRepository dayTaskRepository;
-    private final PersonService personService;
-    private String userName;
+    private final PersonRepository personRepository;
+
 
     @Value("${jwt.secret}")
     private String secret;
 
     @Autowired
-    public TaskService(DateTaskRepository dateTaskRepository, DayTaskRepository dayTaskRepository, PersonService personService) {
+    public TaskService(DateTaskRepository dateTaskRepository, DayTaskRepository dayTaskRepository, PersonRepository personRepository) {
         this.dateTaskRepository = dateTaskRepository;
         this.dayTaskRepository = dayTaskRepository;
-        this.personService = personService;
+        this.personRepository = personRepository;
+
     }
 
 
     @Transactional
-    public AllTaskDto getAllTask(Date date) {
+    public AllTaskDto getAllTask(Date date,String userName) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
-        userName = jwtuser.getUsername();
 
         Map<Integer, String> mapOfTask = new HashMap<>();
-        Optional<Person> person = personService.findByUserName(userName);
+        Optional<Person> person = personRepository.findByUsername(userName);
 
         if (person.isPresent()) {
             Person p = person.get();
@@ -87,15 +80,12 @@ public class TaskService implements TaskRepository {
 
     // задачи в List идут по порядку приоритетности по полю priority
     @Transactional
-    public WeekTaskDto getTaskByWeek(String firstDate, String lastDate) {
+    public WeekTaskDto getTaskByWeek(String firstDate, String lastDate,String userName) {
         Date startDate = Date.valueOf(firstDate);
         Date endDate = Date.valueOf(lastDate);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
-        userName = jwtuser.getUsername();
 
-        Optional<Person> byUserName = personService.findByUserName(userName);
+        Optional<Person> byUserName = personRepository.findByUsername(userName);
         if (byUserName.isPresent()) {
             Person person = byUserName.get();
             List<DateTask> collect = person.getDateTasks().stream()
@@ -127,14 +117,11 @@ public class TaskService implements TaskRepository {
 
 
     @Transactional
-    public void addTask(String date, int priority, String task) {
+    public void addTask(String date, int priority, String task,String userName) {
         Date dateOfTask = Date.valueOf(date);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser jwtuser = (JwtUser) authentication.getPrincipal();
-        userName = jwtuser.getUsername();
 
-        Optional<Person> byUserName = personService.findByUserName(userName);
+        Optional<Person> byUserName = personRepository.findByUsername(userName);
         if (byUserName.isPresent()) {
 
             Person person = byUserName.get();

@@ -30,7 +30,7 @@ public class AuthenticationController {
     @PostMapping("login")
     public ResponseEntity<JwtAuthDto> login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
         JwtAuthDto jwtAuthDto = new JwtAuthDto();
-        try {
+
             Person person = personService.findByUserName(authenticationRequestDto.getUsername()).orElseThrow(
                     ()-> new ApiRequestException(String.format("User with name:%s is not found",authenticationRequestDto.getUsername())));
             String accessToken = jwtTokenProvider.createAccessToken(person);
@@ -41,12 +41,6 @@ public class AuthenticationController {
             jwtAuthDto.setAccessToken(accessToken);
             jwtAuthDto.setRefreshToken(refreshToken);
 
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-        }
 
         return ResponseEntity.ok(jwtAuthDto);
 

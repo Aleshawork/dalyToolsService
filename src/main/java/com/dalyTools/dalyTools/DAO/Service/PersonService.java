@@ -3,7 +3,6 @@ package com.dalyTools.dalyTools.DAO.Service;
 import com.dalyTools.dalyTools.DAO.Entity.Person;
 import com.dalyTools.dalyTools.DAO.Repository.PersonRepository;
 import com.dalyTools.dalyTools.DAO.Repository.RoleRepository;
-import com.dalyTools.dalyTools.DAO.Repository.taskRepo.TaskRepository;
 import com.dalyTools.dalyTools.DAO.dto.PersonDto;
 import com.dalyTools.dalyTools.exceptions.ApiException;
 import lombok.extern.slf4j.Slf4j;

@@ -9,6 +9,7 @@ import com.dalyTools.dalyTools.DAO.payload.TaskPayloadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,21 +28,28 @@ public class TasksController {
 
 
     @PostMapping("/getall")
-    AllTaskDto getAllTaskByDate(@RequestBody TaskPayloadDTO taskPayloadDTO){
+    AllTaskDto getAllTaskByDate(@RequestBody TaskPayloadDTO taskPayloadDTO, Authentication authentication){
         Date date=  Date.valueOf(taskPayloadDTO.getDate());
-        return  taskService.getAllTask(date);
+        return  taskService.getAllTask(date, authentication.getName());
     }
 
     @PostMapping("/getweek")
-    WeekTaskDto getTaskByWeek(@RequestBody IntervalTaskPayloadDTO intervalTaskPayloadDTO ){
+    WeekTaskDto getTaskByWeek(@RequestBody IntervalTaskPayloadDTO intervalTaskPayloadDTO,Authentication authentication ){
 
-        return taskService.getTaskByWeek(intervalTaskPayloadDTO.getFirstDate()
-                ,intervalTaskPayloadDTO.getLastDate());
+        return taskService.getTaskByWeek(
+                intervalTaskPayloadDTO.getFirstDate()
+                ,intervalTaskPayloadDTO.getLastDate()
+                ,authentication.getName()
+                );
     }
 
     @PostMapping("/addone")
-    void addNewTask(@RequestBody TaskDto taskDto){
-        taskService.addTask(taskDto.getDate(),taskDto.getPriority(),taskDto.getTask());
+    void addNewTask(@RequestBody TaskDto taskDto,Authentication authentication){
+        taskService.addTask(
+                taskDto.getDate()
+                ,taskDto.getPriority()
+                ,taskDto.getTask()
+                , authentication.getName());
     }
 
 
